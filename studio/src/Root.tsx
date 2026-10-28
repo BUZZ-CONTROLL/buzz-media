@@ -23,7 +23,7 @@ import { MagicReel } from "./slotmagie2/MagicReel";
 import { CrazyReel } from "./crazybuzzer/CrazyReel";
 import { CrazyReelCI } from "./crazybuzzer/CrazyReelCI";
 import { CrazyHalloween } from "./crazybuzzer/CrazyHalloween";
-import { CrazyDaily, DAILY_DEFAULT } from "./crazybuzzer/CrazyDaily";
+import { CrazyDaily, DAILY_DEFAULT, DAILY_FRAMES } from "./crazybuzzer/CrazyDaily";
 
 const W = { width: 1920, height: 1080, fps: 30 };
 
@@ -57,6 +57,6 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="CrazyBuzzer-Reel-9x16" component={CrazyReel} durationInFrames={600} width={1080} height={1920} fps={30} />
     <Composition id="CrazyBuzzer-CI-Reel-9x16" component={CrazyReelCI} durationInFrames={600} width={1080} height={1920} fps={30} />
     <Composition id="CrazyBuzzer-Halloween-9x16" component={CrazyHalloween} durationInFrames={450} width={1080} height={1920} fps={30} />
-    <Composition id="CrazyBuzzer-Daily-9x16" component={CrazyDaily} defaultProps={DAILY_DEFAULT} durationInFrames={450} width={1080} height={1920} fps={30} />
+    <Composition id="CrazyBuzzer-Daily-9x16" component={CrazyDaily} defaultProps={DAILY_DEFAULT} durationInFrames={DAILY_FRAMES} width={1080} height={1920} fps={30} />
   </>
 );

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Usage: ./make_covers.sh <video.mp4> <out-prefix>
 # Schreibt <out-prefix>-cover-1.jpg (Titel), -cover-2.jpg (Slots), -cover-3.jpg (Logo/CTA)
-# als 1080x1920-JPEGs. Zeiten passen zu den 15-s-Vorlagen (Hook 0-3 s, Slots 3-7 s, Message 7-11 s, CTA 11-15 s).
+# als 1080x1920-JPEGs. Zeiten passen zur Daily-Vorlage (Hook 0-3 s, Slots 3-7 s, Message 7-11 s,
+# Logo-Sting 11-14,87 s -> Cover 3 bei 13,5 s = fertiges Logo, CTA 14,87-18,87 s).
 set -euo pipefail
 VIDEO="$1"; PREFIX="$2"
 i=1

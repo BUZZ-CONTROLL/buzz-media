@@ -1,10 +1,15 @@
 import React from "react";
-import { AbsoluteFill, Easing, Img, interpolate, Loop, OffthreadVideo, random, Series, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, Loop, OffthreadVideo, random, Sequence, Series, staticFile, useCurrentFrame } from "remotion";
 import { Ghost, Night as SpookyNight, Pumpkin, Web } from "./CrazyHalloween";
 
-/* CrazyBuzzer · daily reel template. 15 s @30fps, 120 BPM.
-   Cuts 90 · 210 · 330 (3 / 7 / 11 s), button presses at f35 and f390 (1.167 s / 13.0 s).
+/* CrazyBuzzer · daily reel template. 18.87 s @30fps, 120 BPM.
+   Cuts 90 · 210 · 330 · 446 (3 / 7 / 11 / 14.87 s), button presses at f35 and f506.
+   330–446 = offizielles Logo-Sting (public/crazybuzzer/logo_sting.mp4, 116 Frames);
+   make_daily.sh setzt dort den Original-Sound des Stings zwischen die Musik (Musik 0–11 s | Sting | Musik 11–15 s).
    Everything a day changes lives in DailyProps (passed with --props=<file>.json). */
+
+export const STING_FRAMES = 116;
+export const DAILY_FRAMES = 450 + STING_FRAMES;
 
 export type Decor = "neon" | "spooky" | "gold" | "winter" | "party";
 export type DailyProps = {
@@ -354,11 +359,19 @@ const Notice: React.FC<{ P: DailyProps }> = ({ P }) => (
   </div>
 );
 
+const LogoSting: React.FC = () => (
+  <AbsoluteFill style={{ background: "#04334b" }}>
+    <OffthreadVideo src={staticFile("crazybuzzer/logo_sting.mp4")} muted style={{ width: 1080, height: 1920 }} />
+  </AbsoluteFill>
+);
+
 const Flash: React.FC<{ P: DailyProps }> = ({ P }) => {
   const f = useCurrentFrame();
-  const o = [35, 90, 210, 330, 390].reduce((m, c) => Math.max(m, f >= c ? interpolate(f, [c, c + 6], [0.45, 0], { extrapolateRight: "clamp" }) : 0), 0);
+  const o = [35, 90, 210, 330 + STING_FRAMES, 390 + STING_FRAMES].reduce((m, c) => Math.max(m, f >= c ? interpolate(f, [c, c + 6], [0.45, 0], { extrapolateRight: "clamp" }) : 0), 0);
   return <AbsoluteFill style={{ background: P.accent, opacity: o, mixBlendMode: "screen" }} />;
 };
+
+const Vignette: React.FC = () => <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,0.55) 100%)" }} />;
 
 const Punch: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const f = useCurrentFrame();
@@ -383,13 +396,21 @@ export const CrazyDaily: React.FC<Partial<DailyProps>> = (props) => {
             <Message P={P} />
           </Punch>
         </Series.Sequence>
+        <Series.Sequence name="Logo-Sting" durationInFrames={STING_FRAMES}>
+          <LogoSting />
+        </Series.Sequence>
         <Series.Sequence name="CTA" durationInFrames={120}>
           <Punch>
             <Cta P={P} />
           </Punch>
         </Series.Sequence>
       </Series>
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,0.55) 100%)" }} />
+      <Sequence durationInFrames={330}>
+        <Vignette />
+      </Sequence>
+      <Sequence from={330 + STING_FRAMES}>
+        <Vignette />
+      </Sequence>
       <Flash P={P} />
       <PinnedLogo />
       <Notice P={P} />
